@@ -55,7 +55,6 @@ public class LibIpaMultipointTest {
         List<Bytes> FrBytes = new ArrayList<>();
         for (int i = 0; i < 256; i++) {
             Bytes32 value = Bytes32.fromHexString(testData.frs.get(i));
-            System.out.println("value " + i + " : " + value);
             FrBytes.add(value);
         }
         byte[] input = Bytes.concatenate(FrBytes).toArray();
