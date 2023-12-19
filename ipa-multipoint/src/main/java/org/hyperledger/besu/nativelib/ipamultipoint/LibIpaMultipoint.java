@@ -21,9 +21,11 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Java interface to ipa-multipoint, a rust library that supports computing polynomial commitments.
+ * Java interface to ipa-multipoint, a rust library that supports computing
+ * polynomial commitments.
  *
- * The library relies on the bandersnatch curve described at https://eprint.iacr.org/2021/1152.pdf.
+ * The library relies on the bandersnatch curve described at
+ * https://eprint.iacr.org/2021/1152.pdf.
  *
  */
 public class LibIpaMultipoint {
@@ -44,22 +46,27 @@ public class LibIpaMultipoint {
   }
 
   /**
-   * Evaluates a polynomial of degree 255 (uniquely defined by 256 values) at a specific point on the curve.
-
+   * Evaluates a polynomial of degree 255 (uniquely defined by 256 values) at a
+   * specific point on the curve.
+   * 
    * @param input [Fr,Fr,Fr...]
    * @return group_to_field(commitment)
    */
   public static native byte[] commit(byte[] input);
 
   /**
-   * Evaluates a polynomial of degree 255 (uniquely defined by 256 values) at a specific point on the curve.
+   * Evaluates a polynomial of degree 255 (uniquely defined by 256 values) at a
+   * specific point on the curve.
+   * 
    * @param input [Fr,Fr,Fr...]
    * @return commitment.to_bytes()
    */
-  public static native byte[] commit_root(byte[] input);
+  public static native byte[] commitRoot(byte[] input);
 
   /**
-   * Pedersen hash as specified in https://notes.ethereum.org/@vbuterin/verkle_tree_eip
+   * Pedersen hash as specified in
+   * https://notes.ethereum.org/@vbuterin/verkle_tree_eip
+   * 
    * @param input Expects 64byte value as input encoded as byte[]
    * @return 32bytes as byte[]
    */
