@@ -17,13 +17,13 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class PedersenCommitmentTest {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static List<TestData> JsonData() throws IOException {
         InputStream inputStream = PedersenCommitmentTest.class.getResourceAsStream("/pedersen_commitment_test.json");
-        return objectMapper.readValue(inputStream, new TypeReference<List<TestData>>() {});
+        return objectMapper.readValue(inputStream, new TypeReference<List<TestData>>() {
+        });
     }
 
     static class TestData {
@@ -35,7 +35,7 @@ public class PedersenCommitmentTest {
     @MethodSource("JsonData")
     public void TestPolynomialCommitments(TestData testData) {
         List<Bytes> FrBytes = new ArrayList<>();
-        for (int i = 0 ; i < 256; i++ ) {
+        for (int i = 0; i < 256; i++) {
             BigInteger decimalBigInt = new BigInteger(testData.frs.get(i));
             FrBytes.add(Bytes32.leftPad(Bytes.wrap(decimalBigInt.toByteArray())));
         }

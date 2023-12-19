@@ -16,13 +16,53 @@
 package org.hyperledger.besu.nativelib.ipa_multipoint;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import static org.assertj.core.api.Assertions.*;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.tuweni.bytes.Bytes;
 import org.apache.tuweni.bytes.Bytes32;
 import org.hyperledger.besu.nativelib.ipamultipoint.LibIpaMultipoint;
 
 public class LibIpaMultipointTest {
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    static class TestData {
+        public ArrayList<String> frs;
+        public String expected;
+    }
+
+    public static List<TestData> JsonData() throws IOException {
+        InputStream inputStream = LibIpaMultipointTest.class
+                .getResourceAsStream("/genesis_lvl1_commits.json");
+        return objectMapper.readValue(inputStream, new TypeReference<List<TestData>>() {
+        });
+    }
+
+    @ParameterizedTest
+    @MethodSource("JsonData")
+    public void testCommitRoot(TestData testData) {
+        List<Bytes> FrBytes = new ArrayList<>();
+        for (int i = 0; i < 256; i++) {
+            Bytes32 value = Bytes32.fromHexString(testData.frs.get(i));
+            System.out.println("value " + i + " : " + value);
+            FrBytes.add(value);
+        }
+        byte[] input = Bytes.concatenate(FrBytes).toArray();
+        Bytes32 result = Bytes32.wrap(LibIpaMultipoint.commitRoot(input));
+        Bytes32 expected = Bytes32.fromHexString(testData.expected);
+        assertThat(result).isEqualTo(expected);
+    }
 
     @Test
     public void testCallLibrary() {
@@ -65,6 +105,7 @@ public class LibIpaMultipointTest {
         Bytes32 trieIndex = Bytes32.fromHexString("0x1C4C6CE0115457AC1AB82968749EB86ED2D984743D609647AE88299989F91271");
         byte[] total = Bytes.wrap(address, trieIndex).toArray();
         Bytes result = Bytes.of(LibIpaMultipoint.pedersenHash(total));
-        assertThat(result).isEqualTo(Bytes32.fromHexString("0x2e50716b7d8c6d13d6005ea248f63f5a11ed63318cad38010f4bcb9a9c2e8b43"));
+        assertThat(result)
+                .isEqualTo(Bytes32.fromHexString("0x2e50716b7d8c6d13d6005ea248f63f5a11ed63318cad38010f4bcb9a9c2e8b43"));
     }
 }
