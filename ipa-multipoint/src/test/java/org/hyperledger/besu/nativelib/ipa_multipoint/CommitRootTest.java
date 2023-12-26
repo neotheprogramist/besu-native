@@ -32,7 +32,7 @@ public class CommitRootTest {
 
     @ParameterizedTest
     @MethodSource("JsonData")
-    public void TestPolynomialCommitments(TestData testData) {
+    public void TestCommitRoot(TestData testData) {
         List<Bytes> FrBytes = new ArrayList<>();
         for (int i = 0; i < 256; i++) {
             Bytes32 value = Bytes32.fromHexString(testData.frs.get(i));
